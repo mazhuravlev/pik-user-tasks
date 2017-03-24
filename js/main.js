@@ -63,8 +63,10 @@ let acceptCollection = (client, dest) => {
                             if (task.completed) {
                                 task.isDue = false;
                             } else {
-                                user.dueTasksCount++;
-                                task.isDue = Date.parse(task.due_on) > currentTimestamp;
+                                task.isDue = Date.parse(task.due_on) < currentTimestamp;
+                                if(task.isDue) {
+                                    user.dueTasksCount++;
+                                }
                             }
                         } else {
                             user.dueNotSetTasksCount++;
@@ -72,6 +74,7 @@ let acceptCollection = (client, dest) => {
                         }
                         return task;
                     });
+                    user.duePercent = user.taskCount === 0 ? 0 : ((user.dueTasksCount / user.taskCount)*100).toFixed(0);
                     dest.push(user);
                 });
             }

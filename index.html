@@ -39,14 +39,16 @@
                         <th></th>
                         <th>Название</th>
                         <th>Выполнена</th>
+                        <th>Просрочена</th>
                         <th>Срок до</th>
                     </tr>
                     </thead>
                     <tbody>
                         <tr v-for="task in userInfo.tasks">
-                            <td><a target="_blank" v-bind:href="`https://app.asana.com/0/${task.id}/${workspaceId}`">открыть</a></td>
+                            <td><a target="_blank" v-bind:href="`https://app.asana.com/0/${userInfo.id}/${task.id}`">открыть</a></td>
                             <td v-bind:title="task.name">{{strimwidth(task.name, 80)}}</td>
-                            <td>{{task.iscompleted ? 'да' : 'нет'}}</td>
+                            <td>{{task.completed ? 'да' : 'нет'}}</td>
+                            <td>{{task.isDue ? 'да' : 'нет'}}</td>
                             <td>{{task.due_on}}</td>
                         </tr>
                     </tbody>
@@ -57,6 +59,7 @@
                 <thead class="">
                 <tr>
                     <th v-on:click="sortUsersByAlpha('name')" style="cursor:ns-resize;"><i class="glyphicon glyphicon-sort"></i> Имя</th>
+                    <th v-on:click="sortUsersBy('duePercent')" style="cursor:ns-resize;"><i class="glyphicon glyphicon-sort"></i> % просроченных</th>
                     <th v-on:click="sortUsersBy('taskCount')" style="cursor:ns-resize;"><i class="glyphicon glyphicon-sort"></i> Кол-во задач</th>
                     <th v-on:click="sortUsersBy('dueTasksCount')" style="cursor:ns-resize;"><i class="glyphicon glyphicon-sort"></i> Кол-во просроченных</th>
                     <th v-on:click="sortUsersBy('dueNotSetTasksCount')" style="cursor:ns-resize;"><i class="glyphicon glyphicon-sort"></i> Кол-во без срока</th>
@@ -65,6 +68,7 @@
                 <tbody>
                 <tr v-for="user in users">
                     <td>{{user.name}}</td>
+                    <td>{{user.duePercent}}</td>
                     <td>{{user.tasks.length}}</td>
                     <td>{{user.dueTasksCount}}</td>
                     <td>{{user.dueNotSetTasksCount}}</td>
