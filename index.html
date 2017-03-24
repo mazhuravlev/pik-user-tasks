@@ -1,0 +1,87 @@
+<!doctype html>
+<html class="no-js" lang="" xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:v-bind="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title></title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <!-- Place favicon.ico in the root directory -->
+
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body>
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+    your browser</a> to improve your experience.</p>
+<![endif]-->
+<h1></h1>
+<div class="container">
+    <div id="app">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <button class="btn btn-primary" v-on:click="loadUsers">Загрузить</button>
+                <label>Ключ API</label>
+                <input v-model="apikey" style="display: inline-block; width: 200px;" class="form-control" id="api-key"/>
+            </div>
+            <div v-if="userInfo">
+                <h2>Информация по задачам {{userInfo.name}}</h2>
+                <div class="alert alert-info" v-if="userInfo.tasks.length === 0">Не найдено задач</div>
+                <table v-if="userInfo.tasks.length > 0" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th>Название</th>
+                        <th>Выполнена</th>
+                        <th>Срок до</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="task in userInfo.tasks">
+                            <td><a target="_blank" v-bind:href="`https://app.asana.com/0/${task.id}/${workspaceId}`">открыть</a></td>
+                            <td v-bind:title="task.name">{{strimwidth(task.name, 80)}}</td>
+                            <td>{{task.iscompleted ? 'да' : 'нет'}}</td>
+                            <td>{{task.due_on}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h2>Задачи сотрудников: {{users.length}} чел.</h2>
+            <table class="table table-striped">
+                <thead class="">
+                <tr>
+                    <th v-on:click="sortUsersByAlpha('name')" style="cursor:ns-resize;"><i class="glyphicon glyphicon-sort"></i> Имя</th>
+                    <th v-on:click="sortUsersBy('taskCount')" style="cursor:ns-resize;"><i class="glyphicon glyphicon-sort"></i> Кол-во задач</th>
+                    <th v-on:click="sortUsersBy('dueTasksCount')" style="cursor:ns-resize;"><i class="glyphicon glyphicon-sort"></i> Кол-во просроченных</th>
+                    <th v-on:click="sortUsersBy('dueNotSetTasksCount')" style="cursor:ns-resize;"><i class="glyphicon glyphicon-sort"></i> Кол-во без срока</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr v-for="user in users">
+                    <td>{{user.name}}</td>
+                    <td>{{user.tasks.length}}</td>
+                    <td>{{user.dueTasksCount}}</td>
+                    <td>{{user.dueNotSetTasksCount}}</td>
+                    <td><button v-on:click="showTaskInfo(user.id)">Инфо</button></td>
+                </tr>
+                </tbody>
+            </table>
+            <!--</div>-->
+        </div>
+    </div>
+
+    <script src="js/jquery-1.12.0.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
+    <script src="js/asana.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+
+</body>
+</html>
