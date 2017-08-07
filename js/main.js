@@ -1,6 +1,3 @@
-//let apiKey = '0/cc880fedbaec6446c336f3178bbce1bf';
-
-
 const pikWorkspaceId = '91610147640165';
 
 let app = new Vue({
@@ -84,7 +81,7 @@ let acceptCollection = (client, dest) => {
 };
 
 let loadUsers = (client, dest) => {
-    client.users.findAll({workspace: pikWorkspaceId, limit: 100})
+    client.users.findAll({workspace: pikWorkspaceId,opt_fields: ['photo', 'name', 'email'], limit: 10})
         .then(acceptCollection(client, dest))
         .then(acceptCollection(client, dest))
         .then(acceptCollection(client, dest));
